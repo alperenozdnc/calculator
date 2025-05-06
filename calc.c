@@ -1,3 +1,4 @@
+#include <ctype.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -91,12 +92,32 @@ bool validate_expression(char expression[]) {
                 return false;
             }
 
+            if (is_operator(exp_no_spaces[i + 1])) {
+                printf("%c can't be next to %c\n", c, exp_no_spaces[i + 1]);
+                return false;
+            }
+
             operation_count++;
         }
 
         if (c == LEFT) {
+            if (i == strlen(exp_no_spaces) - 1) {
+                printf("can't end with (\n");
+                return false;
+            }
+
+            if (!isdigit(exp_no_spaces[i + 1])) {
+                printf("expected number after (\n");
+                return false;
+            }
+
             left_paren_count++;
         } else if (c == RIGHT) {
+            if (!isdigit(exp_no_spaces[i - 1])) {
+                printf("expected number before )\n");
+                return false;
+            }
+
             right_paren_count++;
         }
     }
