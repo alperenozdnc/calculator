@@ -7,6 +7,7 @@ typedef enum { PLUS = '+', MINUS = '-', TIMES = '*', DIVIDE = '/' } Operations;
 typedef enum { LEFT = '(', RIGHT = ')' } Parentheses;
 
 void get_expression(char *expression);
+bool is_operator(char c);
 bool validate_expression(char expression[]);
 
 int main() {
@@ -35,18 +36,16 @@ void get_expression(char *expression) {
     expression[strlen(expression) - 1] = '\0';
 }
 
+bool is_operator(char c) {
+    return c == PLUS || c == MINUS || c == TIMES || c == DIVIDE;
+}
+
 bool validate_expression(char expression[]) {
-    const Parentheses left_paren = LEFT;
-    const Parentheses right_paren = RIGHT;
-    const Operations plus = PLUS;
-    const Operations minus = MINUS;
-    const Operations times = TIMES;
-    const Operations divide = DIVIDE;
     const char space = ' ';
 
-    char allowed_characters[] = {
-        left_paren, right_paren, plus, minus, times, divide, space, '1', '2',
-        '3',        '4',         '5',  '6',   '7',   '8',    '9',   '0'};
+    char allowed_characters[] = {LEFT,  RIGHT, PLUS, MINUS, TIMES, DIVIDE,
+                                 space, '1',   '2',  '3',   '4',   '5',
+                                 '6',   '7',   '8',  '9',   '0'};
 
     bool result = true;
 
@@ -86,7 +85,7 @@ bool validate_expression(char expression[]) {
     for (int i = 0; i < strlen(exp_no_spaces); i++) {
         char c = exp_no_spaces[i];
 
-        if (c == plus || c == minus || c == times || c == divide) {
+        if (is_operator(c)) {
             if (i == 0 || i == strlen(exp_no_spaces) - 1) {
                 printf("expression can't start or end with an operator\n");
                 return false;
@@ -95,9 +94,9 @@ bool validate_expression(char expression[]) {
             operation_count++;
         }
 
-        if (c == left_paren) {
+        if (c == LEFT) {
             left_paren_count++;
-        } else if (c == right_paren) {
+        } else if (c == RIGHT) {
             right_paren_count++;
         }
     }
