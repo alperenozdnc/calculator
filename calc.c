@@ -1,5 +1,6 @@
 #include <stdbool.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 typedef enum { PLUS = '+', MINUS = '-', TIMES = '*', DIVIDE = '/' } Operations;
@@ -28,6 +29,7 @@ void get_expression(char *expression) {
 
     if (strlen(expression) == 1) {
         printf("no input given\n");
+        exit(1);
     }
 
     expression[strlen(expression) - 1] = '\0';
