@@ -25,6 +25,11 @@ int main() {
 void get_expression(char *expression) {
     printf("enter expression: ");
     fgets(expression, 100, stdin);
+
+    if (strlen(expression) == 1) {
+        printf("no input given\n");
+    }
+
     expression[strlen(expression) - 1] = '\0';
 }
 
