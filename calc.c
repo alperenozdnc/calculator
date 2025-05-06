@@ -1,3 +1,4 @@
+#include <ctype.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
@@ -52,7 +53,7 @@ bool validate_expression(char expression[]) {
     int left_paren_count = 0;
     int right_paren_count = 0;
 
-    char exp_no_spaces[strlen(expression)] = {};
+    char exp_no_spaces[100] = {0};
 
     for (int i = 0; i < strlen(expression); i++) {
         char c = expression[i];
@@ -79,11 +80,6 @@ bool validate_expression(char expression[]) {
 
             return false;
         }
-    }
-
-    if (strlen(exp_no_spaces) % 2 == 0) {
-        printf("missing operator(s) and/or operand(s)\n");
-        return false;
     }
 
     for (int i = 0; i < strlen(exp_no_spaces); i++) {
