@@ -44,7 +44,6 @@ bool validate_expression(char expression[]) {
     bool result = true;
 
     int operation_count = 0;
-    int parentheses_count = 0;
     int left_paren_count = 0;
     int right_paren_count = 0;
 
@@ -96,14 +95,12 @@ bool validate_expression(char expression[]) {
 
         if (c == left_paren) {
             left_paren_count++;
-            parentheses_count++;
         } else if (c == right_paren) {
             right_paren_count++;
-            parentheses_count++;
         }
     }
 
-    if (parentheses_count % 2 != 0 || left_paren_count != right_paren_count) {
+    if (left_paren_count != right_paren_count) {
         printf("a parenthesis wasn't closed\n");
         return false;
     }
