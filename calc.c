@@ -4,22 +4,65 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define EXPRESSION_SIZE 100
+#define BUFFER_SIZE 50
+
 typedef enum { PLUS = '+', MINUS = '-', TIMES = '*', DIVIDE = '/' } Operations;
 typedef enum { LEFT = '(', RIGHT = ')' } Parentheses;
+typedef enum { NUMBER = -1, ADDITION, MULTIPLICATION, PARENTHESIS } Precedence;
 
 void get_expression(char *expression);
+int get_precedence(char c);
 bool is_operator(char c);
 bool validate_expression(char expression[]);
 
 int main() {
-    char expression[100] = {0};
+    char expression[EXPRESSION_SIZE] = {0};
 
     get_expression(expression);
 
     const bool IS_EXP_VALID = validate_expression(expression);
 
-    if (!IS_EXP_VALID) {
+    if (!IS_EXP_VALID)
         return 1;
+
+    char tokens[][BUFFER_SIZE] = {0};
+    char buffer[BUFFER_SIZE] = {0};
+    int token_idx = 0;
+    int buffer_idx = 0;
+
+    for (int i = 0; i < strlen(expression); i++) {
+        char c = expression[i];
+        Precedence precedence = get_precedence(c);
+
+        printf("ITERATION %d\n", i);
+        printf("BUFFER '%s'\n", buffer);
+        printf("TOKEN INDEX %d\n", token_idx);
+        printf("BUFFER INDEX %d\n\n", buffer_idx);
+
+        if (precedence == PARENTHESIS) {
+            // parenthesis logic...
+            continue;
+        }
+
+        if (precedence == NUMBER) {
+            buffer[buffer_idx] = c;
+            buffer_idx++;
+            continue;
+        }
+
+        // add / mult logic...
+        strcpy(tokens[token_idx], buffer);
+        strcpy(buffer, "");
+
+        token_idx++;
+        buffer_idx = 0;
+
+        strcpy(tokens[token_idx], &c);
+    }
+
+    for (int i = 0; i < sizeof(tokens) / sizeof(tokens[0]); i++) {
+        // printf("%s", tokens[i]);
     }
 
     return 0;
@@ -27,7 +70,7 @@ int main() {
 
 void get_expression(char *expression) {
     printf("enter expression: ");
-    fgets(expression, 100, stdin);
+    fgets(expression, EXPRESSION_SIZE, stdin);
 
     if (strlen(expression) == 1) {
         printf("no input given\n");
@@ -37,11 +80,25 @@ void get_expression(char *expression) {
     expression[strlen(expression) - 1] = '\0';
 }
 
-bool is_operator(char c) {
-    return c == PLUS || c == MINUS || c == TIMES || c == DIVIDE;
+// 2 -> ()
+// 1 -> */
+// 0 -> +-
+// -1 -> 0123456789
+int get_precedence(char c) {
+    if (c == LEFT || c == RIGHT) {
+        return 2;
+    } else if (c == TIMES || c == DIVIDE) {
+        return 1;
+    } else if (c == PLUS || c == MINUS) {
+        return 0;
+    } else {
+        return -1;
+    }
 }
 
-bool validate_expression(char expression[]) {
+bool is_operator(char c) { return get_precedence(c) > -1; }
+
+bool validate_expression(char *expression) {
     const char space = ' ';
 
     char allowed_characters[] = {LEFT,  RIGHT, PLUS, MINUS, TIMES, DIVIDE,
@@ -54,7 +111,7 @@ bool validate_expression(char expression[]) {
     int left_paren_count = 0;
     int right_paren_count = 0;
 
-    char exp_no_spaces[100] = {0};
+    char exp_no_spaces[EXPRESSION_SIZE] = {0};
 
     for (int i = 0; i < strlen(expression); i++) {
         char c = expression[i];
@@ -131,6 +188,8 @@ bool validate_expression(char expression[]) {
         printf("there has to be at least one operation\n");
         return false;
     }
+
+    strcpy(expression, exp_no_spaces);
 
     return result;
 }
