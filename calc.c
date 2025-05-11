@@ -228,6 +228,8 @@ void tokenize_expression(char expression[], char tokens[][BUFFER_SIZE],
 
 void group_tokens(char tokens[][BUFFER_SIZE], int token_count) {
     for (int i = 0; i < token_count; i++) {
-        printf("%s, ", tokens[i]);
+        char *token = tokens[i];
+
+        printf("%s, ", token);
     }
 }
