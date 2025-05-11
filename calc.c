@@ -26,9 +26,7 @@ int main() {
 
     get_expression(expression);
 
-    const bool IS_EXP_VALID = validate_expression(expression);
-
-    if (!IS_EXP_VALID)
+    if (!validate_expression(expression))
         return 1;
 
     char tokens[EXPRESSION_SIZE][BUFFER_SIZE] = {0};
