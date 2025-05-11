@@ -186,7 +186,8 @@ void tokenize_expression(char expression[], char tokens[][BUFFER_SIZE],
         Precedence precedence = get_precedence(c);
 
         if (precedence == PARENTHESIS) {
-            // parenthesis logic...
+            strcpy(tokens[token_idx++], &c);
+
             continue;
         }
 
