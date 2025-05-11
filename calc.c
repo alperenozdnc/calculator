@@ -13,8 +13,10 @@ typedef enum { NUMBER = -1, ADDITION, MULTIPLICATION, PARENTHESIS } Precedence;
 
 void get_expression(char *expression);
 int get_precedence(char c);
+
 bool is_operator(char c);
 bool is_parenthesis(char c);
+
 bool validate_expression(char expression[]);
 void tokenize_expression(char expression[], char tokens[][BUFFER_SIZE],
                          int *token_count);
