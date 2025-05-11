@@ -31,10 +31,10 @@ int main() {
         return 1;
 
     char tokens[EXPRESSION_SIZE][BUFFER_SIZE] = {0};
-    int token_count = 0;
+    int tokens_len = 0;
 
-    tokenize_expression(expression, tokens, &token_count);
-    group_tokens(tokens, token_count);
+    tokenize_expression(expression, tokens, &tokens_len);
+    group_tokens(tokens, tokens_len);
 
     return 0;
 }
