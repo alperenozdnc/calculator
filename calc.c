@@ -11,7 +11,7 @@ typedef enum { PLUS = '+', MINUS = '-', TIMES = '*', DIVIDE = '/' } Operations;
 typedef enum { LEFT = '(', RIGHT = ')' } Parentheses;
 typedef enum { NUMBER = -1, ADDITION, MULTIPLICATION, PARENTHESIS } Precedence;
 
-void get_expression(char *expression);
+void read_expression(char *expression);
 int get_precedence(char c);
 
 bool is_operator(char c);
@@ -24,7 +24,7 @@ void tokenize_expression(char expression[], char tokens[][BUFFER_SIZE],
 int main() {
     char expression[EXPRESSION_SIZE] = {0};
 
-    get_expression(expression);
+    read_expression(expression);
 
     if (!validate_expression(expression))
         return 1;
@@ -41,7 +41,7 @@ int main() {
     return 0;
 }
 
-void get_expression(char *expression) {
+void read_expression(char *expression) {
     printf("enter expression: ");
     fgets(expression, EXPRESSION_SIZE, stdin);
 
