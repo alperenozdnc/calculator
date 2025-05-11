@@ -20,6 +20,8 @@ bool is_parenthesis(char c);
 bool validate_expression(char expression[]);
 void tokenize_expression(char expression[], char tokens[][BUFFER_SIZE],
                          int *token_count);
+void group_tokens(char tokens[][BUFFER_SIZE]);
+void order_tokens(char tokens[][BUFFER_SIZE]);
 
 int main() {
     char expression[EXPRESSION_SIZE] = {0};
@@ -227,3 +229,7 @@ void tokenize_expression(char expression[], char tokens[][BUFFER_SIZE],
 
     *token_count = token_idx;
 }
+
+void group_tokens(char tokens[][BUFFER_SIZE]) {}
+
+void order_tokens(char tokens[][BUFFER_SIZE]) {}
