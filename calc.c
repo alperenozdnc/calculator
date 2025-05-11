@@ -14,6 +14,7 @@ typedef enum { NUMBER = -1, ADDITION, MULTIPLICATION, PARENTHESIS } Precedence;
 void get_expression(char *expression);
 int get_precedence(char c);
 bool is_operator(char c);
+bool is_parenthesis(char c);
 bool validate_expression(char expression[]);
 void tokenize_expression(char expression[], char tokens[][BUFFER_SIZE],
                          int *token_count);
@@ -70,6 +71,8 @@ int get_precedence(char c) {
 
 bool is_operator(char c) { return get_precedence(c) > -1; }
 
+bool is_parenthesis(char c) { return c == LEFT || c == RIGHT; }
+
 bool validate_expression(char *expression) {
     const char space = ' ';
 
@@ -114,16 +117,21 @@ bool validate_expression(char *expression) {
 
     for (int i = 0; i < strlen(exp_no_spaces); i++) {
         char c = exp_no_spaces[i];
+        char next_c = exp_no_spaces[i + 1];
 
         if (is_operator(c)) {
             if (i == 0 || i == strlen(exp_no_spaces) - 1) {
-                printf("expression can't start or end with an operator\n");
-                return false;
+                if (!is_parenthesis(c)) {
+                    printf("expression can't start or end with an operator\n");
+                    return false;
+                }
             }
 
-            if (is_operator(exp_no_spaces[i + 1])) {
-                printf("%c can't be next to %c\n", c, exp_no_spaces[i + 1]);
-                return false;
+            if (is_operator(next_c)) {
+                if (!is_parenthesis(c) && !is_parenthesis(next_c)) {
+                    printf("%c can't be next to %c\n", c, exp_no_spaces[i + 1]);
+                    return false;
+                }
             }
 
             operation_count++;
