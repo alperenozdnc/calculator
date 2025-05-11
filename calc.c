@@ -15,6 +15,8 @@ void get_expression(char *expression);
 int get_precedence(char c);
 bool is_operator(char c);
 bool validate_expression(char expression[]);
+void tokenize_expression(char expression[], char tokens[][BUFFER_SIZE],
+                         int *token_count);
 
 int main() {
     char expression[EXPRESSION_SIZE] = {0};
@@ -26,43 +28,13 @@ int main() {
     if (!IS_EXP_VALID)
         return 1;
 
-    char tokens[][BUFFER_SIZE] = {0};
-    char buffer[BUFFER_SIZE] = {0};
-    int token_idx = 0;
-    int buffer_idx = 0;
+    char tokens[EXPRESSION_SIZE][BUFFER_SIZE] = {0};
+    int token_count = 0;
 
-    for (int i = 0; i < strlen(expression); i++) {
-        char c = expression[i];
-        Precedence precedence = get_precedence(c);
+    tokenize_expression(expression, tokens, &token_count);
 
-        printf("ITERATION %d\n", i);
-        printf("BUFFER '%s'\n", buffer);
-        printf("TOKEN INDEX %d\n", token_idx);
-        printf("BUFFER INDEX %d\n\n", buffer_idx);
-
-        if (precedence == PARENTHESIS) {
-            // parenthesis logic...
-            continue;
-        }
-
-        if (precedence == NUMBER) {
-            buffer[buffer_idx] = c;
-            buffer_idx++;
-            continue;
-        }
-
-        // add / mult logic...
-        strcpy(tokens[token_idx], buffer);
-        strcpy(buffer, "");
-
-        token_idx++;
-        buffer_idx = 0;
-
-        strcpy(tokens[token_idx], &c);
-    }
-
-    for (int i = 0; i < sizeof(tokens) / sizeof(tokens[0]); i++) {
-        // printf("%s", tokens[i]);
+    for (int i = 0; i < token_count; i++) {
+        printf("%s, ", tokens[i]);
     }
 
     return 0;
@@ -192,4 +164,57 @@ bool validate_expression(char *expression) {
     strcpy(expression, exp_no_spaces);
 
     return result;
+}
+
+void tokenize_expression(char expression[], char tokens[][BUFFER_SIZE],
+                         int *token_count) {
+    char buffer[BUFFER_SIZE] = {0};
+    int token_idx = 0;
+    int buffer_idx = 0;
+    int number_add_count = 0;
+
+    for (int i = 0; i < strlen(expression); i++) {
+        char c = expression[i];
+        Precedence precedence = get_precedence(c);
+
+        if (precedence == PARENTHESIS) {
+            // parenthesis logic...
+            continue;
+        }
+
+        if (precedence == NUMBER) {
+            buffer[buffer_idx++] = c;
+
+            if (i == strlen(expression) - 1 ||
+                get_precedence(expression[i + 1]) != NUMBER) {
+                if (buffer_idx > 0) {
+                    buffer[buffer_idx] = '\0';
+                    strcpy(tokens[token_idx++], buffer);
+                    buffer_idx = 0;
+                    buffer[0] = '\0';
+                }
+            }
+
+            continue;
+        }
+
+        // add buffer to tokens
+        if (buffer_idx > 0) {
+            strcpy(tokens[token_idx], buffer);
+            strcpy(buffer, "");
+
+            token_idx++;
+            buffer_idx = 0;
+        }
+
+        if (precedence == ADDITION || precedence == MULTIPLICATION) {
+            strcpy(tokens[token_idx], &c);
+            strcpy(buffer, "");
+
+            token_idx++;
+            buffer_idx = 0;
+        }
+    }
+
+    *token_count = token_idx;
 }
