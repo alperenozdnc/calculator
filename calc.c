@@ -20,7 +20,7 @@ bool is_parenthesis(char c);
 bool validate_expression(char expression[]);
 void tokenize_expression(char expression[], char tokens[][BUFFER_SIZE],
                          int *token_count);
-void group_tokens(char tokens[][BUFFER_SIZE]);
+void group_tokens(char tokens[][BUFFER_SIZE], int token_count);
 
 int main() {
     char expression[EXPRESSION_SIZE] = {0};
@@ -34,10 +34,7 @@ int main() {
     int token_count = 0;
 
     tokenize_expression(expression, tokens, &token_count);
-
-    for (int i = 0; i < token_count; i++) {
-        printf("%s, ", tokens[i]);
-    }
+    group_tokens(tokens, token_count);
 
     return 0;
 }
@@ -229,4 +226,8 @@ void tokenize_expression(char expression[], char tokens[][BUFFER_SIZE],
     *token_count = token_idx;
 }
 
-void group_tokens(char tokens[][BUFFER_SIZE]) {}
+void group_tokens(char tokens[][BUFFER_SIZE], int token_count) {
+    for (int i = 0; i < token_count; i++) {
+        printf("%s, ", tokens[i]);
+    }
+}
