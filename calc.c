@@ -207,6 +207,7 @@ void tokenize_expression(char expression[], char tokens[][BUFFER_SIZE],
 
         // add buffer to tokens
         if (buffer_idx > 0) {
+            buffer[strlen(buffer)] = '\0';
             strcpy(tokens[token_idx], buffer);
             strcpy(buffer, "");
 
@@ -215,6 +216,7 @@ void tokenize_expression(char expression[], char tokens[][BUFFER_SIZE],
         }
 
         if (precedence == ADDITION || precedence == MULTIPLICATION) {
+            buffer[strlen(buffer)] = '\0';
             strcpy(tokens[token_idx], &c);
             strcpy(buffer, "");
 
@@ -229,7 +231,8 @@ void tokenize_expression(char expression[], char tokens[][BUFFER_SIZE],
 void group_tokens(char tokens[][BUFFER_SIZE], int token_count) {
     for (int i = 0; i < token_count; i++) {
         char *token = tokens[i];
+        char last_token_char = token[strlen(token) - 1];
 
-        printf("%s, ", token);
+        // check if character is operator
     }
 }
