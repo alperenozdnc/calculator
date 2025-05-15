@@ -184,7 +184,9 @@ void tokenize_expression(char expression[], char tokens[][BUFFER_SIZE],
         Precedence precedence = get_precedence(c);
 
         if (precedence == PARENTHESIS) {
-            strcpy(tokens[token_idx++], &c);
+            tokens[token_idx][0] = c;
+            tokens[token_idx][1] = '\0';
+            token_idx++;
 
             continue;
         }
@@ -217,9 +219,9 @@ void tokenize_expression(char expression[], char tokens[][BUFFER_SIZE],
 
         if (precedence == ADDITION || precedence == MULTIPLICATION) {
             buffer[strlen(buffer)] = '\0';
-            strcpy(tokens[token_idx], &c);
-            strcpy(buffer, "");
 
+            tokens[token_idx][0] = c;
+            tokens[token_idx][1] = '\0';
             token_idx++;
             buffer_idx = 0;
         }
@@ -232,7 +234,5 @@ void group_tokens(char tokens[][BUFFER_SIZE], int token_count) {
     for (int i = 0; i < token_count; i++) {
         char *token = tokens[i];
         char last_token_char = token[strlen(token) - 1];
-
-        // check if character is operator
     }
 }
